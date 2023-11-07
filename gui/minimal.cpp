@@ -18,6 +18,9 @@
 // ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx/wx.h".
+#include <sstream>
+#include <iomanip>
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -185,15 +188,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxString::Format
-                 (
-                    "Welcome to %s!\n"
-                    "\n"
-                    "This is the minimal wxWidgets sample\n"
-                    "running under %s.",
-                    wxVERSION_STRING,
-                    wxGetOsDescription()
-                 ),
+    using namespace std;
+    stringstream ss;
+    ss << "Hunidity: " << 45 << "%"
+       << "  Dew Point: " << fixed << setprecision(1) << 18.45
+       <<  wxString::FromUTF8(u8"\u00B0") << "C";
+    wxMessageBox(ss.str(),
                  "About wxWidgets minimal sample",
                  wxOK | wxICON_INFORMATION,
                  this);
