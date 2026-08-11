@@ -1,4 +1,7 @@
+#include <iostream>
+#include <ios>
 #include "wx/wx.h"
+#include "wx/settings.h"
 
 class MyApp : public wxApp {
 public:
@@ -19,22 +22,26 @@ bool MyApp::OnInit() {
   return true;
 }
 
-class ScrolledWindow : public wxScrolledWindow {
+class Frame : public wxFrame {
 public:
-  ScrolledWindow(wxWindow* parent)
-      : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                         wxVSCROLL | wxALWAYS_SHOW_SB) {
+  Frame(wxWindow* parent)
+      : wxFrame(parent, wxID_ANY, "Foo") {
+    auto color = wxSystemSettings::GetColour(wxSYS_COLOUR_BACKGROUND);
+    std::cout << "Background: " << std::hex << color.GetRGB() << "\n";
+    SetBackgroundColour(color);
+    color = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    std::cout << "Foreground: " << std::hex << color.GetRGB() << "\n";
+    SetForegroundColour(color);
+
     auto vbox = new wxBoxSizer(wxVERTICAL);
-    for (int i = 0; i < 50; i++)
-      vbox->Add(new wxStaticText(this, wxID_ANY, "foobar"));
-    // vbox->FitInside(this);
+    for (int i = 0; i < 20; i++)
+      vbox->Add(new wxStaticText(this, wxID_ANY, "bar"));
     SetSizer(vbox);
-    SetScrollRate(0, 10);
   }
 };
 
 MyFrame::MyFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
   auto vbox = new wxBoxSizer(wxVERTICAL);
-  vbox->Add(new ScrolledWindow(this), wxSizerFlags(1).Expand());
+  vbox->Add(new Frame(this), wxSizerFlags(1).Expand());
   SetSizer(vbox);
 }

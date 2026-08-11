@@ -3,6 +3,7 @@
 #include <string>
 #include <regex>
 #include <wx/uri.h>
+#include <wx/translation.h>
 
 int main(int argc, char**argv) {
   std::stringstream ss;
@@ -19,4 +20,10 @@ int main(int argc, char**argv) {
   wxURI url2(s2);
   std::cout << "s2: " << s2 << "\n";
   std::cout << "IsReference2: " << (url2.IsReference() ? "true\n" : "false\n");
+
+  std::string s3;
+  s3 = _("foobar");
+
+  auto s4 = _("foobar").c_str();
+  auto s5 = _("foobar").ToStdString();
 }
