@@ -1,31 +1,12 @@
 #include <iostream>
 #include <ios>
+
 #include "wx/wx.h"
 #include "wx/settings.h"
 
-class MyApp : public wxApp {
+class Panel : public wxPanel {
 public:
-  virtual bool OnInit();
-};
-
-class MyFrame : public wxFrame {
-public:
-  MyFrame(const wxString& title);
-};
-
-IMPLEMENT_APP(MyApp)
-
-bool MyApp::OnInit() {
-  if (!wxApp::OnInit()) return false;
-  MyFrame* frame = new MyFrame("Minimal wxWidgets App");
-  frame->Show(true);
-  return true;
-}
-
-class Frame : public wxFrame {
-public:
-  Frame(wxWindow* parent)
-      : wxFrame(parent, wxID_ANY, "Foo") {
+  Panel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
     auto color = wxSystemSettings::GetColour(wxSYS_COLOUR_BACKGROUND);
     std::cout << "Background: " << std::hex << color.GetRGB() << "\n";
     SetBackgroundColour(color);
@@ -40,8 +21,23 @@ public:
   }
 };
 
-MyFrame::MyFrame(const wxString& title) : wxFrame(NULL, wxID_ANY, title) {
-  auto vbox = new wxBoxSizer(wxVERTICAL);
-  vbox->Add(new Frame(this), wxSizerFlags(1).Expand());
-  SetSizer(vbox);
-}
+class Frame : public wxFrame {
+public:
+  Frame(const wxString& title): wxFrame(NULL, wxID_ANY, title) {
+    auto vbox = new wxBoxSizer(wxVERTICAL);
+    vbox->Add(new Panel(this), wxSizerFlags(1).Expand());
+    SetSizer(vbox);
+  }
+};
+
+class TheApp : public wxApp {
+public:
+  virtual bool OnInit() {
+    if (!wxApp::OnInit()) return false;
+    auto* frame = new Frame("Minimal wxWidgets App");
+    frame->Show(true);
+    return true;
+  };
+};
+
+IMPLEMENT_APP(TheApp)
